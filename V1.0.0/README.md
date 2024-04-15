@@ -6,7 +6,9 @@ Three tipe of messges are possible.
 
 ### Configuration message:
 
-Information about the frequency of data upload, the type of ventilation and the status of the LED will appear in the configuration payload. Data that can be modified from the mobile application.
+Information about the frequency of data upload, the type of ventilation and the status of the LED will appear in the configuration payload. 
+> [!NOTE]
+> Led and ventilation type can be configured from the APP.
 
 | Data         | Bytes position | Description                                                                                                                                                             |
 | ------------ | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
