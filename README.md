@@ -3,13 +3,13 @@
 </div>
 <div id="badges" align="center">
   <a href="https://www.linkedin.com/company/inbiot/">
-    <img src="https://img.shields.io/badge/LinkedIn-blue?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn Badge"/>
+    <img src="https://img.shields.io/badge/LinkedIn-blue?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn"/>
   </a>
   <a href="https://twitter.com/inbiot_es">
-    <img src="https://img.shields.io/badge/X-black?style=for-the-badge&logo=X&logoColor=white" alt="X Badge"/>
+    <img src="https://img.shields.io/badge/-black?style=for-the-badge&logo=X&logoColor=white" alt="X"/>
   </a>
   <a href="https://www.facebook.com/inBiot.es/">
-    <img src="https://img.shields.io/badge/Facebook-blue?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook Badge"/>
+    <img src="https://img.shields.io/badge/Facebook-blue?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook"/>
   </a>
 </div>
 
