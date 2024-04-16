@@ -21,5 +21,5 @@ Sample functions for inBiot IoT Device Decoders for LoRaWAN integration
 
 | Version | Description                               | Link                                                                  | Deployment Date     | Upgrades                                                                                                                                       |
 | ------- | ----------------------------------------- | --------------------------------------------------------------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1.0     | Decoder for inBiot FW Versions 1.0 - 2.1  | [Link](https://github.com/inBiot-dev/lora-decoders/tree/develop/V1.0) | February 12th, 2024 | Default decoder
 | 1.1     | Decoder for inBiot FW Versions 2.2 - Last | [Link](https://github.com/inBiot-dev/lora-decoders/tree/develop/V1.1) | April 22nd, 2024    | <dl> <li> Ventilation index on data message</li> <li> Mica type on data message </li> <li> Preheating CO, O3 and NO2 sensor notification</li> </dl> |
+| 1.0     | Decoder for inBiot FW Versions 1.0 - 2.1  | [Link](https://github.com/inBiot-dev/lora-decoders/tree/develop/V1.0) | February 12th, 2024 | Default decoder
