@@ -61,7 +61,7 @@ function Decoder(buffer) {
     case 2:
       decoded.fwVersion = customTextDecoder(buffer, 1, 4);
       decoded.model = customTextDecoder(buffer, 4, 21);
-      decoded.type = customTextDecoder(buffer, 21, 30);
+      decoded.micaType = customTextDecoder(buffer, 21, 30);
       decoded.mac = buffer
         .slice(30, 36)
         .map((b) => b.toString(16).padStart(2, "0"))
