@@ -23,6 +23,7 @@ function Decoder(buffer) {
         decoded.temperature = getUint16(buffer, 1, 2) / 10.0;
         decoded.humidity = getUint16(buffer, 3, 4) / 10.0;
         decoded.co2 = getUint16(buffer, 5, 6);
+
         if (decoded.type !== "MINI") {
           decoded.tvoc = getUint16(buffer, 9, 10);
           decoded.pm2_5 = getUint16(buffer, 13, 14);
@@ -48,7 +49,7 @@ function Decoder(buffer) {
           }
           decoded.co = getUint16(buffer, 23, 24);
           if (decoded.co !== 0xffff) {
-            decoded.co /= 10.0;
+            decoded.co /=  10.0;
           } else {
             decoded.co = "Preheating";
           }
