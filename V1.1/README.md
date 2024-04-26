@@ -1,4 +1,4 @@
-# Decoder for MICA - LoRaWAN versions from 1.0 to 2.1
+# Decoder for MICA - LoRaWAN versions from 1.0 to 2.2
 
 ## Mica LoRa messages
 
