@@ -4,7 +4,7 @@ function decodeUplink(input) {
   return { data: decoded };
 }
 
-// Chirpstack v3
+// Chirpstack v3 and Milesight
 function Decode(fPort, bytes) {
   return InbiotDeviceDecode(bytes);
 }
@@ -15,7 +15,7 @@ function Decoder(bytes, port) {
 }
 
 function InbiotDeviceDecode(bytes) {
-  const decoded = {};
+  var decoded = {};
 
   switch (bytes[0]) {
     case 0:
@@ -32,7 +32,7 @@ function InbiotDeviceDecode(bytes) {
       if (decoded.type === "\u0000\u0000\u0000\u0000") {
         decoded.type = "NULL";
       }
-      const typeProperties = {
+      var typeProperties = {
         MINI: true,
         MICA: true,
         PLUS: true,
@@ -100,11 +100,8 @@ function InbiotDeviceDecode(bytes) {
       // MICA TYPE
       decoded.micaType = customTextDecoder(bytes, 21, 30);
       // MAC ADDRESS
-      decoded.mac = bytes
-        .slice(30, 36)
-        .map((b) => b.toString(16).padStart(2, "0"))
-        .join(":")
-        .toUpperCase();
+      decoded.mac = getMac(bytes, 30);
+
       // ----- ONLY MODBUS CONFIGURATION -----
 
       // MODBUS ADDRESS
@@ -120,21 +117,21 @@ function InbiotDeviceDecode(bytes) {
 }
 
 function customTextDecoder(bytes, start, end) {
-  let result = "";
-  for (let i = start; i < end; i++) {
+  var result = "";
+  for (var i = start; i < end; i++) {
     result += String.fromCharCode(bytes[i]);
   }
   return result;
 }
 
 function getUint16(bytes, first, second) {
-  let result = "";
+  var result = "";
   result = (bytes[first] << 8) | bytes[second];
   return result;
 }
 
 function getUint32(bytes, start) {
-  let result = 0;
+  var result = 0;
   result =
     (bytes[start] << 24) |
     (bytes[start + 1] << 16) |
@@ -143,3 +140,15 @@ function getUint32(bytes, start) {
   return result;
 }
 
+function getMac(bytes, start) {
+  var macBytes = bytes.slice(start, start + 6);
+  var macString = "";
+  for (var i = 0; i < macBytes.length; i++) {
+    var hex = macBytes[i].toString(16);
+    macString += hex;
+    if (i < macBytes.length - 1) {
+      macString += ":";
+    }
+  }
+  return macString.toUpperCase();
+}
