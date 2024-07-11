@@ -1,66 +1,66 @@
 # Decoder for MICA - LoRaWAN versions from 1.0 to 2.2
 
-## Mica LoRa messages
+## MICA LoRa messages
 
-Three tipe of messges are possible.
+Three type of messages are possible.
 
 ### Configuration message:
 
 Information about the frequency of data upload, the type of ventilation and the status of the LED will appear in the configuration payload.
 
 > [!NOTE]
-> Led and ventilation type can be configured from the APP.
+> LED (on/off) and ventilation type can be configured from the APP.
 
-| Data         | Bytes position | Description                                                                                                                                                             |
+| Attribute name         | Attribute key | Description                                                                                                                                                             |
 | ------------ | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Message Type | 0              | This value refers to the type of message that is being sent. It can have the following values: <br> 0 = mica configuration <br> 1 = mica data <br> 2 = mica information |
-| Time to send | 1              | Time between send data                                                                                                                                                  |
-| Ventilation  | 2              | Type of ventilation in the room                                                                                                                                         |
-| ledStatus    | 3              | Led status (On or Off)                                                                                                                                                  |
+| Time to send | timeInterval              | Time (in minutes) between each sending of measurements. <br> Default value = 10 minutes.                                                                                                                                               |
+| Type of ventilation  | ventilation              | Type of ventilation in the room. This is used for the auto-calibration cycle of the CO₂ sensor.  <br> Possible values: <br> 1 = 'Daily natural ventilation'  <br> 2 = 'Mechanical forced ventilation' <br> 3 = 'Low ventilation' <br> 4 = 'No ventilation' <br> 5 = 'Calibration off'                                                                                                                                  |
+| LED status    | ledStatus              | Led status (On or Off). <br> Default value = true                                                                                                                                                  |
 
 ### Information Message
 
-This payload will contain all the data regarding the MICA information, including the MAC, version, model, type of mica, and information for the modbus configuration.
+This payload will contain all the MICA information, including the MAC, version, model, type of mica, and information for the Modbus configuration (only in Modbus versions).
 
 > [!NOTE]
 > Modbus values can be configured from the APP.
 
-| Data             | Bytes position | Description                                                                                                                                                                                                                                                                                               |
+| Attribute name         | Attribute key | Description                                                                                                                                                             |
 | ---------------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Message Type     | 0              | This value refers to the type of message that is being sent. It can have the following values: <br> 0 = mica configuration <br> 1 = mica data <br> 2 = mica information                                                                                                                                   |
-| Firmware version | 1-3            | Text string with the device firmware version.                                                                                                                                                                                                                                                             |
-| MICA model       | 4-20           | 17-character text string with the MICA model                                                                                                                                                                                                                                                              |
-| MICA type        | 21-29          | MICA type (MINI, MICA, PLUS, WELL)                                                                                                                                                                                                                                                                        |
-| MAC              | 30-35          | MICAs MAC                                                                                                                                                                                                                                                                                                 |
-| Modbus address   | 36             | Modbus address (0-254)                                                                                                                                                                                                                                                                                    |
-| Parity           | 37             | Different options of parity (0-5) <br> 0: SERIAL_8N1 (No parity, 1 stop bit) <br> 1: SERIAL_8N2 (No parity, 2 stop bit) <br> 2: SERIAL_8E1 (Even parity, 1 stop bit) <br> 3: SERIAL_8E2 (Even parity, 2 stop bit) <br> 4: SERIAL_8O1 (Odd parity, 1 stop bit) <br> 5: SERIAL_8O2 (Odd parity, 2 stop bit) |
-| Baud Rate        | 38-41          | Modbus connection baud rate (default 9600)                                                                                                                                                                                                                                                                |
-
-### Data messages
-
-The data is ordered as follows in the message
-
-| Data              | Value     | Bytes position | Description                                                                                                                                                             |
-| ----------------- | --------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Message Type      | 0-2       | 0              | This value refers to the type of message that is being sent. It can have the following values: <br> 0 = mica configuration <br> 1 = mica data <br> 2 = mica information |
-| Temperature       | 0.0-145.0 | 1-2            | Temperature value in degrees. Divide the value by 10 to obtain the decimal.                                                                                             |
-| Humidity          | 0-100.0   | 3-4            | Humidity value in percentage. Divide the value by 10 to get the decimal.                                                                                                |
-| CO2               | 0-10000   | 5-6            | CO2 value in ppm                                                                                                                                                        |
-| CH2O              | 0-5000    | 7-8            | Formaldehyde value in µg/m³                                                                                                                                             |
-| TVOC (index)      | 0-500     | 9-10           | TVOC value in ppb                                                                                                                                                       |
-| PM1_0             | 0-10000   | 11-12          | PM1.0 value in µg/m³                                                                                                                                                    |
-| PM2_5             | 0-10000   | 13-14          | PM2.5 value in µg/m³                                                                                                                                                    |
-| PM4_0             | 0-10000   | 15-16          | PM4.0 value in µg/m³                                                                                                                                                    |
-| PM10              | 0-10000   | 17-18          | PM10 value in µg/m³                                                                                                                                                     |
-| O3                | 0-5000    | 19-20          | **Model WELL exclusive** <br> Ozone value in ppb                                                                                                                        |
-| NO2               | 0-2500    | 21-22          | **Model WELL exclusive** <br> NO2 value in ppb                                                                                                                          |
-| CO                | 0-1000    | 23-24          | **Model WELL exclusive** <br> CO value in ppm                                                                                                                           |
-| Counter           | 0-65535   | 25-26          | Counter to know if any packet has been lost.                                                                                                                            |
-| MICA type         |           | 27-31          | MICA type (MINI, MICA, PLUS, WELL)                                                                                                                                      |
-| Ventilation Index | 100-0     | 32             | Index value in percentage <br> 100%-84% = Excelent <br> 84%-66% = Good <br> 65%-49% = Moderate <br> 48%-33% = Regular <br> 32%-17% = Inadequate <br> 16%-0% = Poor      |
+| Firmware version | fwVersion            | Text string with the device firmware version.                                                                                                                                                                                                                                                             |
+| MICA model       | model           | 17-character text string with the MICA model                                                                                                                                                                                                                                                              |
+| MICA type        | micaType          | MICA type (MINI, MICA, PLUS, WELL)                                                                                                                                                                                                                                                                        |
+| MAC Address            | mac          | Device's MAC                                                                                                                                                                                                                                                                                                 |
 
 > [!NOTE]
-> More information about Ventilation index could be found [here](https://www.inbiot.es/wikinbiot/indicador-eficacia-ventilacion)
+> Modbus values only available in Modbus models.
+
+| Attribute name         | Attribute key | Description                                                                                                                                                             |
+| ---------------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Modbus address   | modbusAddress             | Modbus slave address (0-254). <br> Default value = 1.                                                                                                                                                                                                                                                                                  |
+| Modbus parity           | modbusParity             | Different options of parity (0-5). <br> Default value = 0. <br> <br> 0: SERIAL_8N1 (No parity, 1 stop bit) <br> 1: SERIAL_8N2 (No parity, 2 stop bit) <br> 2: SERIAL_8E1 (Even parity, 1 stop bit) <br> 3: SERIAL_8E2 (Even parity, 2 stop bit) <br> 4: SERIAL_8O1 (Odd parity, 1 stop bit) <br> 5: SERIAL_8O2 (Odd parity, 2 stop bit) |
+| Modbus baudrate        | modbusBaudRate          | Modbus connection baud rate. <br> Default value = 9600                                                                                                                                                                                                                                                               |
+
+### IAQ Data messages
+
+The indoor air quality (IAQ) data is organized as follows in the message
+
+| Attribute name              | Attribute key     | Range | Description                                                                                                                                                             |
+| ----------------- | --------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Temperature       | temperature | 0.0-145.0ºC            | Temperature value in ºC. [Temperature information](https://www.inbiot.es/wikinbiot/temperature)                                                                                             |
+| Humidity          | humidity   | 0-100.0%            | Humidity value in %. [Humidity information](https://www.inbiot.es/wikinbiot/relative-humidity)                                                                                               |
+| CO₂               | co2  | 0-10000 ppm            | CO₂ value in ppm [CO₂ information](https://www.inbiot.es/wikinbiot/co2)                                                                                                                                                         |
+| CH2O              | ch20    | 0-5000 µg/m³             | Formaldehyde value in µg/m³ [Formaldehyde information](https://www.inbiot.es/wikinbiot/formaldehyde)                                                                                                                                            |
+| TVOC (Total Volatile Organic Compounds)      | tvoc     | 0-500           | TVOC value in index value [TVOC information](https://www.inbiot.es/wikinbiot/tvoc)                                                                                                                                                       |
+| PM1_0             | pm1_0   |   0-10000 µg/m³        | PM1.0 value in µg/m³ [Particulate matter information](https://www.inbiot.es/wikinbiot/particulate-matter)                                                                                                                                                   |
+| PM2_5             | pm2_5   | 0-10000 µg/m³          | PM2.5 value in µg/m³ [Particulate matter information](https://www.inbiot.es/wikinbiot/particulate-matter)                                                                                                                                                     |
+| PM4_0             | pm4   | 0-10000 µg/m³          | PM4.0 value in µg/m³  [Particulate matter information](https://www.inbiot.es/wikinbiot/particulate-matter)                                                                                                                                                   |
+| PM10              | pm10   | 0-10000 µg/m³          | PM10 value in µg/m³ [Particulate matter information](https://www.inbiot.es/wikinbiot/particulate-matter)                                                                                                                                                     |
+| O₃                |  o3   | 0-5000 ppb          | **Model WELL exclusive** <br> Ozone value in ppb [O₃ information](https://www.inbiot.es/wikinbiot/ozone)                                                                                                                       |
+| NO₂               |  no2   | 0-2500 ppb          | **Model WELL exclusive** <br> NO₂ value in ppb [NO₂ information](https://www.inbiot.es/wikinbiot/nitrogen-dioxide)                                                                                                                        |
+| CO                | co    | 0-1000 ppm          | **Model WELL exclusive** <br> CO value in ppm [CO information](https://www.inbiot.es/wikinbiot/carbon-monoxide)                                                                                                                          |
+| Ventilation Index | vIndex     | 100-0            | Index value in percentage <br> [Ventilation Index information](https://www.inbiot.es/wikinbiot/indicador-eficacia-ventilacion) <br> 100%-84% = Excellent <br> 84%-66% = Good <br> 65%-49% = Moderate <br> 48%-33% = Regular <br> 32%-17% = Inadequate <br> 16%-0% = Poor    |
+| Counter           | counter   | 0-65535          | Counter to know if any packet has been lost.                                                                                                                            |
+| MICA type         |  type         |           | MICA type (MINI, MICA, PLUS, WELL)                                                                                                                                      |
 
 > [!IMPORTANT]
 > All sensor measurements correspond to 2-byte integer values.
