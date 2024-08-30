@@ -119,6 +119,9 @@ function InbiotDeviceDecode(bytes) {
 function customTextDecoder(bytes, start, end) {
   var result = "";
   for (var i = start; i < end; i++) {
+    if (bytes[i] === 0x00) {  
+      break; 
+    }
     result += String.fromCharCode(bytes[i]);
   }
   return result;
