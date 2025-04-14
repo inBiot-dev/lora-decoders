@@ -18,14 +18,14 @@ function Encoder(input, fPort) {
 function inbiotDeviceDecode(payload) {
   var encoded = [];
 
-  if ("ledEnable" in payload) {
-    encoded = encoded.concat(setLedEnable(payload.ledEnable));
+  if ("ledStatus" in payload) {
+    encoded = encoded.concat(setLedEnable(payload.ledStatus));
   }
-  if ("sendPeriodicity" in payload) {
-    encoded = encoded.concat(setSendPeriodicity(payload.sendPeriodicity));
+  if ("timeToSend" in payload) {
+    encoded = encoded.concat(setSendPeriodicity(payload.timeToSend));
   }
-  if ("co2Calibration" in payload) {
-    encoded = encoded.concat(setCo2Calibration(payload.co2Calibration));
+  if ("ventilation" in payload) {
+    encoded = encoded.concat(setCo2Calibration(payload.ventilation));
   }
   if ("ledConfiguration" in payload) {
     encoded = encoded.concat(setLedConfiguration(payload.ledConfiguration));
@@ -38,47 +38,43 @@ function inbiotDeviceDecode(payload) {
 
 /**
  *
- * @param {number} ledEnable value: (true/false)
- * @description This function encodes the ledEnable value into a byte array.
+ * @param {number} ledStatus value: (true/false)
+ * @description This function encodes the ledStatus value into a byte array.
  * * Possible values:
  * * * true: LED enabled
  * * * false: LED disabled
- * @example { "ledEnable": true }
+ * @example { "ledStatus": true }
  */
-function setLedEnable(ledEnable) {
-  if (typeof ledEnable !== "boolean") {
-    throw new Error("ledEnable must be a boolean value.");
+function setLedEnable(ledStatus) {
+  if (typeof ledStatus !== "boolean") {
+    throw new Error("ledStatus must be a boolean value.");
   }
-  return [0x01, 0x01, ledEnable ? 0x01 : 0x00];
+  return [0x01, 0x01, ledStatus ? 0x01 : 0x00];
 }
 
 /**
  *
- * @param {number} sendPeriodicity value: (0-60)
- * @description This function encodes the sendPeriodicity value into a byte array.
+ * @param {number} timeToSend value: (0-60)
+ * @description This function encodes the timeToSend value into a byte array.
  * * Possible values:
  * * * 0: Default periodicity (every 15 minutes)
  * * * 1 - 60: Custom periodicity in minutes
- * @example { "sendPeriodicity": 0 }
+ * @example { "timeToSend": 0 }
  */
-function setSendPeriodicity(sendPeriodicity) {
-  if (
-    typeof sendPeriodicity !== "number" ||
-    sendPeriodicity < 0 ||
-    sendPeriodicity > 60
-  ) {
-    throw new Error("sendPeriodicity must be a number between 0 and 60.");
+function setSendPeriodicity(timeToSend) {
+  if (typeof timeToSend !== "number" || timeToSend < 0 || timeToSend > 60) {
+    throw new Error("timeToSend must be a number between 0 and 60.");
   }
-  if (sendPeriodicity === 0) {
+  if (timeToSend === 0) {
     return [0x02, 0x01, 0xf];
   } else {
-    return [0x02, 0x01, sendPeriodicity];
+    return [0x02, 0x01, timeToSend];
   }
 }
 
 /**
  * Function to encode co2Calibration
- * @param {number} co2Calibration value: (1-5)
+ * @param {number} ventilation value: (1-5)
  * @description This function encodes the co2Calibration value into a byte array.
  * * Possible values:
  * * 1: Calibration every 48 hours
@@ -86,17 +82,17 @@ function setSendPeriodicity(sendPeriodicity) {
  * * 3: Calibration every 7 days
  * * 4: Calibration every 15 days
  * * 5: No calibration
- * @example { "co2Calibration": 1 }
+ * @example { "ventilation": 1 }
  */
-function setCo2Calibration(co2Calibration) {
+function setCo2Calibration(ventilation) {
   if (
-    typeof co2Calibration !== "number" ||
-    co2Calibration < 1 ||
-    co2Calibration > 5
+    typeof ventilation !== "number" ||
+    ventilation < 1 ||
+    ventilation > 5
   ) {
-    throw new Error("co2Calibration must be a number between 1 and 5.");
+    throw new Error("ventilation must be a number between 1 and 5.");
   }
-  return [0x03, 0x01, co2Calibration];
+  return [0x03, 0x01, ventilation];
 }
 
 /**
@@ -158,4 +154,3 @@ function CustomBuffer(size) {
     this.buffer[i] = 0;
   }
 }
-

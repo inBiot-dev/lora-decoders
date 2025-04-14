@@ -98,9 +98,9 @@ The main function, `inbiotDeviceDecode`, processes the input payload and encodes
 
 | Parameter           | Description                                                                                     | Example Input       |
 |---------------------|-------------------------------------------------------------------------------------------------|---------------------|
-| `ledEnable`         | Enables or disables the LED. Possible values: `true` (enabled), `false` (disabled).             | `{ "ledEnable": true }` |
-| `sendPeriodicity`   | Sets the periodicity of data sending in minutes. Range: `0-60`.     <br> Default configuration = 15 min (value 0)                            | `{ "sendPeriodicity": 10 }` |
-| `co2Calibration`    | Configures the CO₂ sensor calibration. Range: `1-5`.  <br> 1 = Calibration every 48 hours  <br> 2 = Calibration every 24 hours <br> 3 = Calibration every 7 days <br> 4 = Calibration every 15 days <br> 5 = No calibration                                           | `{ "co2Calibration": 3 }` |
+| `ledStatus`         | Enables or disables the LED. Possible values: `true` (enabled), `false` (disabled).             | `{ "ledStatus": true }` |
+| `timeToSend`   | Sets the periodicity of data sending in minutes. Range: `0-60`.     <br> Default configuration = 15 min (value 0)                            | `{ "timeToSend": 10 }` |
+| `ventilation`    | Configures the CO₂ sensor calibration. Range: `1-5`.  <br> 1 = Calibration every 48 hours  <br> 2 = Calibration every 24 hours <br> 3 = Calibration every 7 days <br> 4 = Calibration every 15 days <br> 5 = No calibration                                           | `{ "ventilation": 3 }` |
 | `ledConfiguration`  | Configures the LED indicator. Range: `0-15`.     <br> 0 = Ventilation indicator <br> 1 = Confort indicator <br> 2 = Temperature indicator <br> 3 = Humidity indicator <br> 4 = CO₂ indicator <br> 5 = VOCS indicator <br> 6 = PM2.5 indicator <br> 7 = PM10 indicator <br> 8 = Virus indicator <br> 9 = IAQ indicator <br> 10 = PM1.0 indicator <br> 11 = PM4 indicator <br> 12 = CH₂O Indicator <br> 13 = O₃ indicator <br> 14 = NO₂ indicator <br> 15 = CO indicator                                                | `{ "ledConfiguration": 4 }` |
 | `touchEnable`       | Enables or disables the touch functionality. Possible values: `true` (enabled), `false` (disabled). | `{ "touchEnable": false }` |
 
@@ -116,9 +116,9 @@ Here is an example of how to use the encoder:
 
 ```json
 {
-  "ledEnable": true,
-  "sendPeriodicity": 10,
-  "co2Calibration": 2,
+  "ledStatus": true,
+  "timeToSend": 10,
+  "ventilation": 2,
   "ledConfiguration": 1,
   "touchEnable": false
 }
