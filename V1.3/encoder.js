@@ -85,11 +85,7 @@ function setSendPeriodicity(timeToSend) {
  * @example { "ventilation": 1 }
  */
 function setCo2Calibration(ventilation) {
-  if (
-    typeof ventilation !== "number" ||
-    ventilation < 1 ||
-    ventilation > 5
-  ) {
+  if (typeof ventilation !== "number" || ventilation < 1 || ventilation > 5) {
     throw new Error("ventilation must be a number between 1 and 5.");
   }
   return [0x03, 0x01, ventilation];
@@ -143,14 +139,4 @@ function setTouchEnable(touchEnable) {
     throw new Error("touchEnable must be a boolean value.");
   }
   return [0x05, 0x01, touchEnable ? 0x01 : 0x00];
-}
-
-// Buffer class for encoding
-function CustomBuffer(size) {
-  this.buffer = new Array(size);
-  this.offset = 0;
-
-  for (var i = 0; i < size; i++) {
-    this.buffer[i] = 0;
-  }
 }
