@@ -121,21 +121,19 @@ The main function, `inbiotDeviceDecode`, processes the input payload and encodes
 Here is an example of how to use the encoder: 
 
 ```json
-
 {
-// Device Configuration
+  // Device Configuration
   "ledEnable": true,
   "sendPeriodicity": 30,
   "co2Calibration": 1,
   "ledConfiguration": 4,
   "touchEnable": true,
-// LoRaWAN Configuration
+  // LoRaWAN Configuration
   "ADREnable": false,
   "DR": 2,
   "sendRetransmissions": 5,
   "confirmationEnable": true,
   "resetDevice": false        
 }
-
 ```
 This will encode the provided parameters into a byte array that the MICA device can interpret.
