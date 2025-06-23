@@ -33,6 +33,26 @@ function inbiotDeviceDecode(payload) {
   if ("touchEnable" in payload) {
     encoded = encoded.concat(setTouchEnable(payload.touchEnable));
   }
+  if ("ADREnable" in payload) {
+    encoded = encoded.concat(setADREnable(payload.ADREnable));
+  }
+  if ("DR" in payload) {
+    encoded = encoded.concat(setDR(payload.DR));
+  }
+  if ("sendRetransmissions" in payload) {
+    encoded = encoded.concat(
+      setSendRetransmissions(payload.sendRetransmissions)
+    );
+  }
+  if ("TXPower" in payload) {
+    encoded = encoded.concat(setTXPower(payload.TXPower));
+  }
+  if ("confiramtionEnable" in payload) {
+    encoded = encoded.concat(setConfirmationEnable(payload.confiramtionEnable));
+  }
+  if ("resetDevice" in payload) {
+    encoded = encoded.concat(setResetDevice(payload.resetDevice));
+  }
   return encoded;
 }
 
@@ -139,4 +159,118 @@ function setTouchEnable(touchEnable) {
     throw new Error("touchEnable must be a boolean value.");
   }
   return [0x05, 0x01, touchEnable ? 0x01 : 0x00];
+}
+
+/**
+ *
+ * @param {number} ADREnable value: (true/false)
+ * @description This function encodes the ADREnable value into a byte array.
+ * * Possible values:
+ * * true: ADR enabled
+ * * false: ADR disabled
+ * @example { "ADREnable": true }
+ */
+function setADREnable(ADREnable) {
+  if (typeof ADREnable !== "boolean") {
+    throw new Error("ADREnable must be a boolean value.");
+  }
+  return [0x09, 0x01, ADREnable ? 0x01 : 0x00];
+}
+
+/**
+ *
+ * @param {number} DR value: (0-7)
+ * @description This function encodes the DR value into a byte array.
+ * * Possible values:
+ * * 0: DR0 = SF12
+ * * 1: DR1 = SF11
+ * * 2: DR2 = SF10
+ * * 3: DR3 = SF9
+ * * 4: DR4 = SF8
+ * * 5: DR5 = SF7 (default)
+ * * 6: DR6 = SF7 (250 kHz)
+ * * 7: DR7 = FSK
+ * @example { "DR": 0 }
+ */
+function setDR(DR) {
+  if (typeof DR !== "number" || DR < 0 || DR > 7) {
+    throw new Error("DR must be a number between 0 and 7.");
+  }
+  return [0x0a, 0x01, DR];
+}
+
+/**
+ *
+ * @param {number} sendRetransmissions value: (0-15)
+ * @description This function encodes the sendRetransmissions value into a byte array.
+ * * Possible values:
+ * * 0 - 15: Number of retransmissions (0 = no retransmissions, 1-15 = number of retransmissions)
+ * * 5: Default value
+ * @example { "sendRetransmissions": 5 }
+ */
+function setSendRetransmissions(sendRetransmissions) {
+  if (
+    typeof sendRetransmissions !== "number" ||
+    sendRetransmissions < 0 ||
+    sendRetransmissions > 15
+  ) {
+    throw new Error("sendRetransmissions must be a number between 0 and 15.");
+  }
+  return [0x0b, 0x01, sendRetransmissions];
+}
+
+/**
+ *
+ * @param {number} TXPower value: (0-15)
+ * @description This function encodes the TXPower value into a byte array.
+ * * Possible values:
+ * * 0: Max EIRP (default)
+ * * 1: Max EIRP - 2 dB
+ * * 2: Max EIRP - 4 dB
+ * * 3: Max EIRP - 6 dB
+ * * 4: Max EIRP - 8 dB
+ * * 5: Max EIRP - 10 dB
+ * * 6: Max EIRP - 12 dB
+ * * 7: Max EIRP - 14 dB
+ * * 8 - 14 : Reserved for future use
+ * * 15 : Defined in [TS001] Error! Invalid value.
+ * @example { "TXPower": 5 }
+ */
+function setTXPower(TXPower) {
+  if (typeof TXPower !== "number" || TXPower < 0 || TXPower > 15) {
+    throw new Error("TXPower must be a number between 0 and 15.");
+  }
+  return [0x0c, 0x01, TXPower];
+}
+
+/**
+ *
+ * @param {number} confirmationEnable value: (true/false)
+ * @description This function encodes the confirmationEnable value into a byte array.
+ * * Possible values:
+ * * true: Confirmation enabled
+ * * false: Confirmation disabled
+ * @example { "confirmationEnable": true }
+ */
+function setConfirmationEnable(confirmationEnable) {
+  if (typeof confirmationEnable !== "boolean") {
+    throw new Error("confirmationEnable must be a boolean value.");
+  }
+  return [0x0d, 0x01, confirmationEnable ? 0x01 : 0x00];
+}
+
+/**
+ *
+ * @param {number} resetDevice value: (true/false)
+ * @description This function encodes the resetDevice value into a byte array.
+ * * Possible values:
+ * * true: Reset device
+ * * false: Do not reset device
+ * @example { "resetDevice": true }
+ */
+function setResetDevice(resetDevice) {
+  if (typeof resetDevice !== "boolean") {
+    throw new Error("resetDevice must be a boolean value.");
+  }
+  return [0x0f, 0x01, resetDevice ? 0x01 : 0x00];
 }
