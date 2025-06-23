@@ -99,6 +99,11 @@ function InbiotDeviceDecode(bytes) {
         decoded.virusIndex = bytes[34];
         // IAQ INDEX
         decoded.iaqIndex = bytes[35];
+        // MOLD PERSISTENCE INDEX
+        decoded.moldIndex = bytes[36];
+        if (decoded.moldIndex === 0xff) {
+          decoded.moldIndex = "Calculating";
+        }
         // MESSAGE COUNTER
         decoded.counter = getUint16(bytes, 25, 26);
       }
