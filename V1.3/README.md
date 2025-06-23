@@ -74,6 +74,7 @@ The indoor air quality (IAQ) data is organized as follows in the message
 | Thermal Index | tIndex | 0-100 | Thermal comfort index. <br> <a href="https://www.inbiot.es/wikinbiot/indicador-confort-termohigrometrico"><img src="https://img.shields.io/badge/Thermohygrometric Comfort Indicator Info-blue?style=for-the-badge" alt="Link"/></a> |
 | Virus Index | virusIndex | 0-100 | Virus risk index. <br> <a href="https://www.inbiot.es/wikinbiot/indicador-resistencia-virus"><img src="https://img.shields.io/badge/Virus Spread Resistance Indicator Info-blue?style=for-the-badge" alt="Link"/></a> |
 | IAQ Index | iaqIndex | 0-100 | Indoor air quality index. <br> <a href="https://www.inbiot.es/wikinbiot/indicador-calidad-de-aire-interior"><img src="https://img.shields.io/badge/Indoor Air Quality Indicator Info-blue?style=for-the-badge" alt="Link"/></a> |
+| Mold Persistence Index | moldIndex | 0-100 | Mold persistence index. <br> <img src="https://img.shields.io/badge/Mold Persistence Indicator Info-gray?style=for-the-badge" alt="Link"/> |
 | Counter           | counter   | 0-65535          | Counter to know if any packet has been lost.                                                                                                                            |
 | MICA type         |  type         |           | MICA type (MINI, MICA, PLUS, WELL)                                                                                                                                      |
 
@@ -102,7 +103,12 @@ The main function, `inbiotDeviceDecode`, processes the input payload and encodes
 | `timeToSend`   | Sets the periodicity of data sending in minutes. Range: `0-60`.     <br> Default configuration = 15 min (value 0)                            | `{ "timeToSend": 10 }` |
 | `ventilation`    | Configures the CO₂ sensor calibration. Range: `1-5`.  <br> 1 = Calibration every 48 hours  <br> 2 = Calibration every 24 hours <br> 3 = Calibration every 7 days <br> 4 = Calibration every 15 days <br> 5 = No calibration                                           | `{ "ventilation": 3 }` |
 | `ledConfiguration`  | Configures the LED indicator. Range: `0-15`.     <br> 0 = Ventilation indicator <br> 1 = Confort indicator <br> 2 = Temperature indicator <br> 3 = Humidity indicator <br> 4 = CO₂ indicator <br> 5 = VOCS indicator <br> 6 = PM2.5 indicator <br> 7 = PM10 indicator <br> 8 = Virus indicator <br> 9 = IAQ indicator <br> 10 = PM1.0 indicator <br> 11 = PM4 indicator <br> 12 = CH₂O Indicator <br> 13 = O₃ indicator <br> 14 = NO₂ indicator <br> 15 = CO indicator                                                | `{ "ledConfiguration": 4 }` |
-| `touchEnable`       | Enables or disables the touch functionality. Possible values: `true` (enabled), `false` (disabled). | `{ "touchEnable": false }` |
+| `touchEnable`       | Enables or disables the touch functionality. Possible values: `true` (enabled), `false` (disabled) | `{ "touchEnable": false }` |
+| `ARDEnable` | Enables or disables the ADR (Adaptative Data Rate) functionality. Possible values: `true` (enabled), `false` (disabled) | `{ "ARDEnable": true }` |
+| `DR` | Sets the Data Rate for the LoRaWAN connection. Range: `0-5`. <br> 0 = SF12 / 125 kHz, bit rate 250 bit/s  <br> 1 = SF11 / 125 kHz, bit rate 440 bit/s <br> 2 = SF10 / 125 kHz, bit rate 980 bit/s   <br> 3 = SF9 / 125 kHz, bit rate 1760 bit/s <br> 4 = SF8 / 125 kHz, bit rate 3125 bit/s <br> 5 = SF7 / 125 kHz, bit rate 5470 bit/s | `{ "DR": 2 }` |
+| `sendRetransmissions` | Sets the number of retransmissions for the message. Range: `0-15`. <br> Default value = 5 | `{ "sendRetransmissions": 3 }` |
+| `confirmationEnable` | Enables or disables the confirmation functionality. Possible values: `true` (enabled), `false` (disabled) | `{ "confirmationEnable": true }` |
+| `resetDevice` | Resets the device. Possible values: `true` (reset), `false` (no reset) | `{ "resetDevice": true }` |
 
 > [!IMPORTANT]
 > Make sure to provide the parameters in the correct format. The encoder will return an error if the input is invalid.
@@ -115,12 +121,21 @@ The main function, `inbiotDeviceDecode`, processes the input payload and encodes
 Here is an example of how to use the encoder: 
 
 ```json
+
 {
-  "ledStatus": true,
-  "timeToSend": 10,
-  "ventilation": 2,
-  "ledConfiguration": 1,
-  "touchEnable": false
+// Device Configuration
+  "ledEnable": true,
+  "sendPeriodicity": 30,
+  "co2Calibration": 1,
+  "ledConfiguration": 4,
+  "touchEnable": true,
+// LoRaWAN Configuration
+  "ADREnable": false,
+  "DR": 2,
+  "sendRetransmissions": 5,
+  "confirmationEnable": true,
+  "resetDevice": false        
 }
+
 ```
 This will encode the provided parameters into a byte array that the MICA device can interpret.

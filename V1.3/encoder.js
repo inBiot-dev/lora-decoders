@@ -193,8 +193,8 @@ function setADREnable(ADREnable) {
  * @example { "DR": 0 }
  */
 function setDR(DR) {
-  if (typeof DR !== "number" || DR < 0 || DR > 7) {
-    throw new Error("DR must be a number between 0 and 7.");
+  if (typeof DR !== "number" || DR < 0 || DR > 5) {
+    throw new Error("DR must be a number between 0 and 5.");
   }
   return [0x0a, 0x01, DR];
 }
