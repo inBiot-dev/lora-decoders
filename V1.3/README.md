@@ -74,7 +74,7 @@ The indoor air quality (IAQ) data is organized as follows in the message
 | Thermal Index | tIndex | 0-100 | Thermal comfort index. <br> <a href="https://www.inbiot.es/wikinbiot/indicador-confort-termohigrometrico"><img src="https://img.shields.io/badge/Thermohygrometric Comfort Indicator Info-blue?style=for-the-badge" alt="Link"/></a> |
 | Virus Index | virusIndex | 0-100 | Virus risk index. <br> <a href="https://www.inbiot.es/wikinbiot/indicador-resistencia-virus"><img src="https://img.shields.io/badge/Virus Spread Resistance Indicator Info-blue?style=for-the-badge" alt="Link"/></a> |
 | IAQ Index | iaqIndex | 0-100 | Indoor air quality index. <br> <a href="https://www.inbiot.es/wikinbiot/indicador-calidad-de-aire-interior"><img src="https://img.shields.io/badge/Indoor Air Quality Indicator Info-blue?style=for-the-badge" alt="Link"/></a> |
-| Mold Persistence Index | moldIndex | 0-100 | Mold persistence index. <br> <img src="https://img.shields.io/badge/Mold Persistence Indicator Info-gray?style=for-the-badge" alt="Link"/> |
+| Mold Persistence Index | moldIndex | 0-100 | Mold persistence index. <br> <a href="https://www.inbiot.es/wikinbiot/resistance-to-mold-growth-indicator"><img src="https://img.shields.io/badge/Mold Persistence Indicator Info-blue?style=for-the-badge" alt="Link"/></a> |
 | Counter           | counter   | 0-65535          | Counter to know if any packet has been lost.                                                                                                                            |
 | MICA type         |  type         |           | MICA type (MINI, MICA, PLUS, WELL)                                                                                                                                      |
 
