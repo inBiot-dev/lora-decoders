@@ -1,7 +1,7 @@
 # Decoder for MICA
 
 > [!IMPORTANT]
-> Compatible with firmware version 2.6 and above.
+> Compatible with firmware version 2.7 and above.
 
 ## MICA LoRa messages
 
