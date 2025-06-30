@@ -14,6 +14,12 @@ function Encoder(input, fPort) {
   return inbiotDeviceDecode(input);
 }
 
+// Decode downlink payloads for InBiot devices
+function decodeDownlink(input) {
+  var decoded = inbiotDeviceDecode(data);
+  return { data: decoded };
+}
+
 // Main encoder function
 function inbiotDeviceDecode(payload) {
   var encoded = [];
@@ -40,7 +46,9 @@ function inbiotDeviceDecode(payload) {
     encoded = encoded.concat(setDR(payload.DR));
   }
   if ("sendRetransmissions" in payload) {
-    encoded = encoded.concat(setSendRetransmissions(payload.sendRetransmissions));
+    encoded = encoded.concat(
+      setSendRetransmissions(payload.sendRetransmissions)
+    );
   }
   if ("TXPower" in payload) {
     encoded = encoded.concat(setTXPower(payload.TXPower));
