@@ -124,7 +124,7 @@ Here is an example of how to use the encoder:
 
 {
 // Device configuration
-"ledEnable": true,
+"ledStatus": true,
 "sendPeriodicity": 30,
 "co2Calibration": 1,
 "ledConfiguration": 4,
@@ -140,3 +140,6 @@ Here is an example of how to use the encoder:
 ```
 
 This will encode the provided parameters into a byte array that the MICA device can interpret.
+
+> [!IMPORTANT]
+> At least for this version (v2.7) the downlink message must be unconfirmed.
