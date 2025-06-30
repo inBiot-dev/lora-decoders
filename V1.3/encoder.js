@@ -40,9 +40,7 @@ function inbiotDeviceDecode(payload) {
     encoded = encoded.concat(setDR(payload.DR));
   }
   if ("sendRetransmissions" in payload) {
-    encoded = encoded.concat(
-      setSendRetransmissions(payload.sendRetransmissions)
-    );
+    encoded = encoded.concat(setSendRetransmissions(payload.sendRetransmissions));
   }
   if ("TXPower" in payload) {
     encoded = encoded.concat(setTXPower(payload.TXPower));
@@ -132,15 +130,16 @@ function setCo2Calibration(ventilation) {
  * * * 13: O3 indicator
  * * * 14: NO2 indicator
  * * * 15: CO indicator
+ * * * 16: Mold Persistence Indicator
  * @example { "ledConfiguration": 0 }
  */
 function setLedConfiguration(ledConfiguration) {
   if (
     typeof ledConfiguration !== "number" ||
     ledConfiguration < 0 ||
-    ledConfiguration > 15
+    ledConfiguration > 16
   ) {
-    throw new Error("ledConfiguration must be a number between 0 and 15.");
+    throw new Error("ledConfiguration must be a number between 0 and 16.");
   }
   return [0x04, 0x01, ledConfiguration];
 }
