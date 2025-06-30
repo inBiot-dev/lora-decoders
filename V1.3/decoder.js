@@ -55,7 +55,9 @@ function InbiotDeviceDecode(bytes) {
         decoded.humidity = getUint16(bytes, 3, 4) / 10.0;
         // CO2
         decoded.co2 = getUint16(bytes, 5, 6);
-
+        if (decoded.co2 === 0xffff) {
+          decoded.co2 = "Preheating";
+        }
         if (decoded.type !== "MINI") {
           // TVOC
           decoded.tvoc = getUint16(bytes, 9, 10);
