@@ -11,13 +11,17 @@ function Encode(fPort, input) {
 
 // The Things Network
 function Encoder(input, fPort) {
-  return inbiotDeviceDecode(input);
+  return inbiotDeviceDecode(input.bytes);
 }
 
-// Decode downlink payloads for InBiot devices
+// The Tings Network decoder downlink
 function decodeDownlink(input) {
-  var decoded = inbiotDeviceDecode(data);
-  return { data: decoded };
+  var encoded = inbiotDeviceDecode(input.bytes);
+  return {
+    data: {
+      bytes: encoded,
+    },
+  };
 }
 
 // Main encoder function
