@@ -125,7 +125,7 @@ Here is an example of how to use the encoder:
 {
 // Device configuration
 "ledStatus": true,
-"sendPeriodicity": 30,
+"tiemToSend": 30,
 "co2Calibration": 1,
 "ledConfiguration": 4,
 "touchEnable": true,
