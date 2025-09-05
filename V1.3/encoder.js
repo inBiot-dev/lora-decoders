@@ -57,8 +57,8 @@ function inbiotDeviceDecode(payload) {
   if ("TXPower" in payload) {
     encoded = encoded.concat(setTXPower(payload.TXPower));
   }
-  if ("confiramtionEnable" in payload) {
-    encoded = encoded.concat(setConfirmationEnable(payload.confiramtionEnable));
+  if ("confirmationEnable" in payload) {
+    encoded = encoded.concat(setConfirmationEnable(payload.confirmationEnable));
   }
   if ("resetDevice" in payload) {
     encoded = encoded.concat(setResetDevice(payload.resetDevice));
