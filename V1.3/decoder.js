@@ -55,9 +55,7 @@ function InbiotDeviceDecode(bytes) {
         decoded.humidity = getUint16(bytes, 3, 4) / 10.0;
         // CO2
         decoded.co2 = getUint16(bytes, 5, 6);
-        if (decoded.co2 === 0xffff) {
-          decoded.co2 = "Preheating";
-        }
+
         if (decoded.type !== "MINI") {
           // TVOC
           decoded.tvoc = getUint16(bytes, 9, 10);
@@ -105,6 +103,10 @@ function InbiotDeviceDecode(bytes) {
         decoded.moldIndex = bytes[36];
         if (decoded.moldIndex === 0xff) {
           decoded.moldIndex = "Calculating";
+        }
+        // NOISE
+        if (bytes[37]) {
+          decoded.dB = bytes[37] === 0xff ? "Preheating" : bytes[37];
         }
         // MESSAGE COUNTER
         decoded.counter = getUint16(bytes, 25, 26);
