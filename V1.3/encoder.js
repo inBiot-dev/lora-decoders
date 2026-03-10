@@ -84,19 +84,21 @@ function setLedEnable(ledStatus) {
 
 /**
  *
- * @param {number} timeToSend value: (0-60)
+ * @param {number} timeToSend value: (5-60)
  * @description This function encodes the timeToSend value into a byte array.
  * * Possible values:
  * * * 0: Default periodicity (every 15 minutes)
- * * * 1 - 60: Custom periodicity in minutes
+ * * * 5 - 60: Custom periodicity in minutes
  * @example { "timeToSend": 0 }
  */
 function setSendPeriodicity(timeToSend) {
   if (typeof timeToSend !== "number" || timeToSend < 0 || timeToSend > 60) {
-    throw new Error("timeToSend must be a number between 0 and 60.");
+    throw new Error("timeToSend must be a number between 5 and 60.");
   }
   if (timeToSend === 0) {
     return [0x02, 0x01, 0xf];
+  } else if (timeToSend < 5) {
+    return [0x02, 0x01, 0x05];
   } else {
     return [0x02, 0x01, timeToSend];
   }
