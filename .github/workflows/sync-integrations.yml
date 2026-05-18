@@ -1,0 +1,190 @@
+name: Sync decoder/encoder to TTN, Actility and Akenza
+
+on:
+  push:
+    branches: [develop]
+    paths:
+      - "V1.3/decoder.js"
+      - "V1.3/encoder.js"
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      # ══════════════════════════════════════════════════════════════════════
+      # CHECKLIST — read this before reviewing the generated PRs
+      # ══════════════════════════════════════════════════════════════════════
+      - name: "📋 Sync checklist — what to verify after each change"
+        run: |
+          echo "=========================================================="
+          echo "  CHECKLIST DE MODIFICACION DEL DECODER/ENCODER V1.3"
+          echo "=========================================================="
+          echo ""
+          echo "Si has añadido o modificado CAMPOS DE SENSOR en decoder.js:"
+          echo "  [ ] 1. Actualizar sync/templates/akenza-core-decode.js"
+          echo "         (Akenza usa nombres distintos — ver tabla abajo)"
+          echo "  [ ] 2. Añadir casos de test en lorawan-actility/.../examples.json"
+          echo "  [ ] 3. Actualizar los tests Mocha en lorawan-akenza/types/inbiot/*"
+          echo "  [ ] 4. TTN y Actility se generan solos; Akenza usa el template manual"
+          echo ""
+          echo "Si has añadido un NUEVO COMANDO DOWNLINK en encoder.js:"
+          echo "  [ ] 1. Añadir el handler setX() en encoder.js"
+          echo "  [ ] 2. Añadir el if ('campo' in payload) en inbiotDeviceDecode()"
+          echo "  [ ] 3. Actualizar sync/templates/akenza-downlink-helpers.js"
+          echo "  [ ] 4. Añadir un ejemplo downlink en lorawan-actility/.../examples.json"
+          echo ""
+          echo "TABLA DE EQUIVALENCIA DE NOMBRES DE CAMPO"
+          echo "----------------------------------------------------------"
+          echo "  TTN / Actility   →   Akenza"
+          echo "  pm1_0            →   pm1"
+          echo "  dB               →   noise  (o noiseStatus si vale 0xFF)"
+          echo "  moldIndex        →   moldIndex  (o moldIndexStatus si 0xFF)"
+          echo "  o3               →   o3  (o o3Status si vale 0xFFFF)"
+          echo "  no2              →   no2  (o no2Status si vale 0xFFFF)"
+          echo "  co               →   co  (o coStatus si vale 0xFFFF)"
+          echo "----------------------------------------------------------"
+          echo "  Nota: en Akenza los estados 'Preheating'/'Calculating'"
+          echo "  se emiten como campo separado y el valor se elimina."
+          echo "=========================================================="
+
+      # ── Checkout source repo (lora-decoders) ──────────────────────────────
+      - name: Checkout lora-decoders
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # ══════════════════════════════════════════════════════════════════════
+      # TTN — MiguelFerrerF/lorawan-TTN (fork of TheThingsNetwork/lorawan-devices)
+      # ══════════════════════════════════════════════════════════════════════
+      - name: Checkout TTN fork
+        uses: actions/checkout@v4
+        with:
+          repository: MiguelFerrerF/lorawan-TTN
+          token: ${{ secrets.GH_PAT }}
+          path: lorawan-TTN
+
+      - name: Build TTN files
+        run: node sync/build-ttn.js
+        env:
+          TARGET_DIR: ${{ github.workspace }}/lorawan-TTN/vendor/inbiot
+
+      - name: Validate TTN decoder syntax
+        run: |
+          node --check lorawan-TTN/vendor/inbiot/decoder.js
+          node --check lorawan-TTN/vendor/inbiot/encoder.js
+
+      - name: Open PR in TTN fork
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GH_PAT }}
+          path: lorawan-TTN
+          branch: inbiot/sync-${{ github.sha }}
+          base: master
+          title: "inBiot: update decoder/encoder V1.3"
+          body: |
+            Auto-synced from [inBiot-dev/lora-decoders@${{ github.sha }}](https://github.com/inBiot-dev/lora-decoders/commit/${{ github.sha }})
+
+            **Changed files:**
+            - `vendor/inbiot/decoder.js`
+            - `vendor/inbiot/encoder.js`
+
+            > This PR was generated automatically. Review and merge when ready.
+          commit-message: "inBiot: sync decoder/encoder from lora-decoders@${{ github.sha }}"
+          delete-branch: true
+
+      # ══════════════════════════════════════════════════════════════════════
+      # Actility — MiguelFerrerF/lorawan-actility (fork of actility/device-catalog)
+      # ══════════════════════════════════════════════════════════════════════
+      - name: Checkout Actility fork
+        uses: actions/checkout@v4
+        with:
+          repository: MiguelFerrerF/lorawan-actility
+          token: ${{ secrets.GH_PAT }}
+          path: lorawan-actility
+
+      - name: Build Actility index.js
+        run: node sync/build-actility.js
+        env:
+          TARGET_DIR: ${{ github.workspace }}/lorawan-actility/vendors/inbiot/drivers/inbiot-decoder
+
+      - name: Run Actility tests
+        id: actility-tests
+        continue-on-error: true
+        working-directory: lorawan-actility/vendors/inbiot/drivers/inbiot-decoder
+        run: node test.js
+
+      - name: Open PR in Actility fork
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GH_PAT }}
+          path: lorawan-actility
+          branch: inbiot/sync-${{ github.sha }}
+          base: main
+          title: "inBiot: update decoder/encoder V1.3"
+          body: |
+            Auto-synced from [inBiot-dev/lora-decoders@${{ github.sha }}](https://github.com/inBiot-dev/lora-decoders/commit/${{ github.sha }})
+
+            **Changed files:**
+            - `vendors/inbiot/drivers/inbiot-decoder/index.js`
+
+            **Test result:** ${{ steps.actility-tests.outcome == 'failure' && '⚠️ FAILED — review before merging' || '✅ All tests passed' }}
+
+            > This PR was generated automatically. Review and merge when ready.
+          commit-message: "inBiot: sync decoder/encoder from lora-decoders@${{ github.sha }}"
+          delete-branch: true
+
+      # ══════════════════════════════════════════════════════════════════════
+      # Akenza — MiguelFerrerF/lorawan-akenza (fork of akenza-io/device-type-library)
+      # ══════════════════════════════════════════════════════════════════════
+      - name: Checkout Akenza fork
+        uses: actions/checkout@v4
+        with:
+          repository: MiguelFerrerF/lorawan-akenza
+          token: ${{ secrets.GH_PAT }}
+          path: lorawan-akenza
+
+      - name: Install Akenza dependencies
+        working-directory: lorawan-akenza
+        run: npm ci
+
+      - name: Build Akenza uplink/downlink files
+        run: node sync/build-akenza.js
+        env:
+          TARGET_DIR: ${{ github.workspace }}/lorawan-akenza/types/inbiot
+
+      - name: Run Akenza tests
+        id: akenza-tests
+        continue-on-error: true
+        working-directory: lorawan-akenza
+        run: npx mocha "types/inbiot/*/uplink.spec.js" "types/inbiot/*/downlink.spec.js"
+
+      - name: Open PR in Akenza fork
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GH_PAT }}
+          path: lorawan-akenza
+          branch: inbiot/sync-${{ github.sha }}
+          base: main
+          title: "inBiot: update decoder/encoder V1.3"
+          body: |
+            Auto-synced from [inBiot-dev/lora-decoders@${{ github.sha }}](https://github.com/inBiot-dev/lora-decoders/commit/${{ github.sha }})
+
+            **Changed files (all 4 models):**
+            - `types/inbiot/mica/uplink.js`
+            - `types/inbiot/mini/uplink.js`
+            - `types/inbiot/plus/uplink.js`
+            - `types/inbiot/well/uplink.js`
+            - `types/inbiot/mica/downlink.js`
+            - `types/inbiot/mini/downlink.js`
+            - `types/inbiot/plus/downlink.js`
+            - `types/inbiot/well/downlink.js`
+
+            **Test result:** ${{ steps.akenza-tests.outcome == 'failure' && '⚠️ FAILED — if new sensor fields were added, update `sync/templates/akenza-core-decode.js` in lora-decoders' || '✅ All tests passed' }}
+
+            > This PR was generated automatically. Review and merge when ready.
+          commit-message: "inBiot: sync decoder/encoder from lora-decoders@${{ github.sha }}"
+          delete-branch: true

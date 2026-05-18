@@ -1,0 +1,11 @@
+{
+  "name": "lora-decoders-sync",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Build scripts to sync inBiot decoder/encoder to TTN, Actility and Akenza integration repos",
+  "scripts": {
+    "build:ttn": "node build-ttn.js",
+    "build:actility": "node build-actility.js",
+    "build:akenza": "node build-akenza.js"
+  }
+}

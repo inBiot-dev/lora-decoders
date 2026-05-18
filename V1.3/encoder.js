@@ -51,7 +51,7 @@ function inbiotDeviceDecode(payload) {
   }
   if ("sendRetransmissions" in payload) {
     encoded = encoded.concat(
-      setSendRetransmissions(payload.sendRetransmissions)
+      setSendRetransmissions(payload.sendRetransmissions),
     );
   }
   if ("TXPower" in payload) {
